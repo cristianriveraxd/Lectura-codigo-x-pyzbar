@@ -1,6 +1,7 @@
 import cv2
 import RPi.GPIO as GPIO
 from pyzbar.pyzbar import decode
+from datetime import datetime
 import threading
 
 # Configuración del GPIO
@@ -11,7 +12,7 @@ GPIO.setup(ALERTA_PIN, GPIO.OUT)
 GPIO.output(ALERTA_PIN, GPIO.LOW)  # Inicialmente apagado
 
 # Inicializa la captura de video
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture("p1.mp4")
 
 if not cap.isOpened():
     print("Error: No se puede abrir la cámara")
@@ -22,7 +23,7 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # Código de barras esperado
-codigo_correcto = "5183"
+codigo_correcto = "5094"
 
 def process_frame(frame):
     barcodes = decode(frame)
@@ -45,7 +46,9 @@ def process_frame(frame):
 
 def tomar_foto(frame):
     """Guarda una imagen cuando se detecta un código incorrecto."""
-    filename = "producto_incorrecto.jpg"
+    time = datetime.now()
+    timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+    filename = f"productos_truncados/producto_truncado_{timestamp}.jpg"
     cv2.imwrite(filename, frame)
     print(f"Foto guardada: {filename}")
 
