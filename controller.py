@@ -3,13 +3,15 @@ from conect import Conexion
 
 db = Conexion()
 
-#Listar usuarios y saber cantidad de usuarios para asi mismo realizar la tabla
-def listarUsuarios():
+#Obtener codigo de barras
+def obtener_codigo_barras():
     cursor = db.connection.cursor()
-    sql = "SELECT * FROM users ORDER BY idUSer ASC"
+    sql = ""  
     cursor.execute(sql)
-    row=cursor.fetchall()
-    lenght=len(row)#consulta la longitud de datos
+    row = cursor.fetchone()
     cursor.close()
-    return row;
-
+    
+    if row:
+        return row[0]  
+    else:
+        return None  
