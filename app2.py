@@ -4,6 +4,7 @@ import os
 import threading
 import RPi.GPIO as GPIO
 from pyzbar.pyzbar import decode
+from controller import obtener_codigo_barras
 
 # Configuración del GPIO para la alarma
 ALARM_PIN = 18  # Cambia esto si usas otro pin
@@ -36,6 +37,7 @@ def save_photo(frame):
 
 def process_frame(frame):
     """ Procesa el frame para detectar códigos de barras """
+    codigo_correcto = obtener_codigo_barras()
     barcodes = decode(frame)
     for barcode in barcodes:
         if barcode.type == "CODE128":
