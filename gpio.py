@@ -12,7 +12,7 @@ GPIO.setup(ALERTA_PIN, GPIO.OUT)
 GPIO.output(ALERTA_PIN, GPIO.LOW)  # Inicialmente apagado
 
 # Inicializa la captura de video
-cap = cv2.VideoCapture("p1.mp4")
+cap = cv2.VideoCapture("p3.mp4")
 
 if not cap.isOpened():
     print("Error: No se puede abrir la cámara")
@@ -23,7 +23,7 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # Código de barras esperado
-codigo_correcto = "5094"
+codigo_correcto = "5096"
 
 def process_frame(frame):
     barcodes = decode(frame)

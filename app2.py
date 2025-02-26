@@ -13,7 +13,7 @@ GPIO.setup(ALARM_PIN, GPIO.OUT)
 GPIO.output(ALARM_PIN, GPIO.LOW)  # Inicia apagada la alarma
 
 # Configuración de la cámara
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # Mayor resolución para mejor lectura
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 

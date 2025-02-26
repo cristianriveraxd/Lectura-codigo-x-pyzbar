@@ -3,7 +3,7 @@ from pyzbar.pyzbar import decode
 import threading
 
 # Inicializa la captura de video desde la cámara (índice 1)
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 # Verifica si la cámara se abrió correctamente
 if not cap.isOpened():
