@@ -1,19 +1,22 @@
 import cv2
-from pyzbar.pyzbar import decode
 import RPi.GPIO as GPIO
+from pyzbar.pyzbar import decode
+from datetime import datetime
 import time
 import threading
 
 # Configuración del GPIO
-ALARM_PIN = 18  # Pin de la alarma
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+ALERTA_PIN = 18 #PIN SALIDA  
 GPIO.setup(ALARM_PIN, GPIO.OUT)
 GPIO.output(ALARM_PIN, GPIO.LOW)  # Iniciar apagado
 
 # Inicializa la cámara
-cap = cv2.VideoCapture(1)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+cap = cv2.VideoCapture(0)
+# Disminuir resolucion de video para mejorar procesamiento
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 def detect_product(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

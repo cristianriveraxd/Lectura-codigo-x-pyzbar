@@ -7,12 +7,12 @@ import threading
 # Configuración del GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-ALERTA_PIN = 18  # Cambia al pin que estés usando
+ALERTA_PIN = 18  # PIN SALIDA
 GPIO.setup(ALERTA_PIN, GPIO.OUT)
 GPIO.output(ALERTA_PIN, GPIO.LOW)  # Inicialmente apagado
 
 # Inicializa la captura de video
-cap = cv2.VideoCapture("p3.mp4")
+cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
     print("Error: No se puede abrir la cámara")
