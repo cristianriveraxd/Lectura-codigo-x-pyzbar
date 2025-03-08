@@ -28,7 +28,7 @@ def process_frame(frame):
             cv2.putText(frame, barcode_value, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
             print('Código de barras leído: ' + barcode_value)
             
-            value = '5183'  
+            value = '5703'  
             
             if value != barcode_value:
                 print('Producto truncado')

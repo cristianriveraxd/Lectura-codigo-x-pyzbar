@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 from pyzbar.pyzbar import decode
 from datetime import datetime
 import threading
+from controller import obtener_codigo_barras
 
 # Configuración del GPIO
 GPIO.setmode(GPIO.BCM)
@@ -22,27 +23,34 @@ if not cap.isOpened():
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-# Código de barras esperado
-codigo_correcto = "5096"
 
+
+# Proceso de frame
 def process_frame(frame):
+    
+    # Código de barras esperado
+    codigo_bd = obtener_codigo_barras()
+    codigo_programado = str(codigo_bd[0])
+    
     barcodes = decode(frame)
     
     for barcode in barcodes:
         if barcode.type == "CODE128":
             (x, y, w, h) = barcode.rect
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            barcode_value = barcode.data.decode("utf-8")
+            lectura=barcode_value = barcode.data.decode("utf-8")
+            leido=str(lectura)
             cv2.putText(frame, barcode_value, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
             print('Código de barras leído:', barcode_value)
+            print('Código de barras obtenido:', codigo_programado)
             
-            if barcode_value != codigo_correcto:
+            if leido != codigo_programado:
                 print('¡Producto incorrecto detectado!')
                 tomar_foto(frame)
                 activar_alerta()
             else:
                 print('Producto correcto')
-                desactivar_alerta()
+                
 
 def tomar_foto(frame):
     """Guarda una imagen cuando se detecta un código incorrecto."""
@@ -59,6 +67,11 @@ def activar_alerta():
 def desactivar_alerta():
     """Desactiva la salida digital en el GPIO (0V)."""
     GPIO.output(ALERTA_PIN, GPIO.LOW)
+    
+#Eliminar espacios en blanco de codigo
+def tratar_codigo(codigo: str) -> str:
+    return codigo.replace(" ","")
+    
 
 while cap.isOpened():
     success, frame = cap.read()
@@ -71,9 +84,13 @@ while cap.isOpened():
     thread.start()
     
     cv2.imshow("Lector", frame)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
         break
+    elif key == ord(' '):  # Reset de la alarma con la tecla espacio
+        print("🔇 Alarma desactivada")
+        desactivar_alerta() # Apaga la alarma
 
 cap.release()
 cv2.destroyAllWindows()
