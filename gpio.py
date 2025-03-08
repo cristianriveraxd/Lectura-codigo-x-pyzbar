@@ -33,7 +33,7 @@ def process_frame(frame):
     codigo_programado = str(codigo_bd[0])
     
     barcodes = decode(frame)
-    
+    i = 0
     for barcode in barcodes:
         if barcode.type == "CODE128":
             (x, y, w, h) = barcode.rect
@@ -44,12 +44,16 @@ def process_frame(frame):
             print('Código de barras leído:', barcode_value)
             print('Código de barras obtenido:', codigo_programado)
             
-            if leido != codigo_programado:
+            
+            if leido.strip() != codigo_programado.strip():
                 print('¡Producto incorrecto detectado!')
                 tomar_foto(frame)
                 activar_alerta()
             else:
-                print('Producto correcto')
+                print(f'Producto correcto #{i}')
+                
+            i += 1
+                
                 
 
 def tomar_foto(frame):
